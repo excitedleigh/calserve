@@ -12,10 +12,16 @@ const client = new OAuth2Client(
 )
 client.on("tokens", async (tokens) => {
   console.log("writing new tokens", tokens)
-  await fs.writeFile("./authdata.json", JSON.stringify(tokens))
+  await fs.writeFile(
+    process.env.DATA_FILE || "./authdata.json",
+    JSON.stringify(tokens),
+  )
 })
 ;(async () => {
-  const tokenStr = await fs.readFile("./authdata.json", "utf8")
+  const tokenStr = await fs.readFile(
+    process.env.DATA_FILE || "./authdata.json",
+    "utf8",
+  )
   client.setCredentials(JSON.parse(tokenStr))
   console.log("tokens loaded")
 })()
